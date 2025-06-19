@@ -1,0 +1,93 @@
+# Sequence Processing Toolkit .gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Data files (exclude large data files from git)
+*.fastq
+*.fq
+*.fastq.gz
+*.fq.gz
+*.sam
+*.bam
+*.bai
+
+# Output directories
+CountFold/
+Outfastq/
+Unmap/
+split_*/
+output_*/
+results_*/
+temp_*/
+
+# Log files
+*.log
+*.out
+*.err
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pytest
+.pytest_cache/
+.coverage
+
+# Documentation builds
+docs/_build/
+docs/build/
+
+# Local configuration files
+config.local.*
+.env
+.env.local 
