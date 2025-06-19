@@ -120,7 +120,7 @@ python S2_Split.py \
 # 处理多个文件的示例脚本
 for file in *.fastq.gz; do
     echo "处理文件: $file"
-    python S2_Split.py -i "$file" -o "split_$(basename $file .fastq.gz)"
+    python S2_Split.py -i "$file" -o "split_$(basename $file .fastq.gz)" -min-length 20   --sep1 "ATCGATCGATCG"  --sep2 "GCTAGCTAGCTA"
 done
 ```
 
