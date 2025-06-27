@@ -1,0 +1,13 @@
+# OSS路径配置文件
+# 格式：每行一个OSS路径，以oss://开头
+# 以#开头的行将被忽略（注释行）
+# 空行也会被忽略
+
+# 示例OSS路径（请根据实际情况修改）
+oss://novo-china-region/X101SC25045215-Z01//X101SC25045215-Z01/202506241230_22NT2NLT4-X101SC25045215-Z01_Result
+oss://novo-china-region/X101SC25045215-Z01//X101SC25045215-Z01/202506240030_22NYHWLT4-X101SC25045215-Z01_Result
+oss://novo-china-region/X101SC25045215-Z01//X101SC25045215-Z01/202506230210_22NT7LLT4-X101SC25045215-Z01_Result
+
+# 可以添加更多路径...
+# oss://your-bucket/your-path/data4
+# oss://your-bucket/your-path/data5 

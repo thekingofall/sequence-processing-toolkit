@@ -1,0 +1,35 @@
+# Group5: MboI+CviQI+GATC+TA+SeqA 配置文件
+# 样本: MME-7 (2个文件)
+
+S1_config:
+  patterns: "ATGTCGGAACTGTTGCTTGTCCGACT"  # SeqA连接序列
+  description: "Group5_MboI_CviQI_GATC_TA_SeqA_Linker_Separation"
+  input_pattern: "*.fq.gz"
+  lines_to_process: 1000000000
+  jobs: 2
+  output_dir: "Group5_S1_Linker_Separated"
+
+S2_config:
+  # 由于使用了两种酶切位点，需要配置主要的分隔符（可以后续调整）
+  separator1: "GATCATGTCGGAACTGTTGCTTGTCCGACTGATC"  # MboI酶切位点+SeqA连接序列
+  separator2: "TAATGTCGGAACTGTTGCTTGTCCGACTTA"  # CviQI酶切位点+SeqA连接序列
+  min_length: 5
+  output_dir: "Group5_S2_Enzyme_Split"
+
+HiC_config:
+  input_dir: "Group5_HiC_Input"
+  project_name: "Group5_MboI_CviQI_GATC_TA_SeqA_HiC"
+  config_type: 1
+  modules: "2,3"  # 默认跳过trim模块
+  cpu_count: 10
+  conda_env: "hicpro3"
+  script_type: "new"  # 'new'=新版本脚本(默认), 'old'=旧版本脚本
+
+workflow_control:
+  skip_s1: false
+  skip_s2: false
+  skip_hic: false
+
+advanced_config:
+  generate_report: true
+  input_data_dir: "/data1/maolp/Biosoft/Myscript/sequence-processing-toolkit/data/fastq/Allfq/ByGroups/Group5_MboI_CviQI_GATC_TA_SeqA" 

@@ -1,0 +1,236 @@
+#!/bin/bash
+
+# S1S2HiC 完整处理流程示例脚本
+# 作者: 序列处理工具包
+# 日期: $(date +%Y-%m-%d)
+
+echo "================================================================"
+echo "S1S2HiC 完整处理流程示例"
+echo "从序列筛选到Hi-C分析的一站式解决方案"
+echo "================================================================"
+
+# 设置基本参数
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/src"
+S1S2HIC_SCRIPT="${SCRIPT_DIR}/S1S2HiC_Pipeline.py"
+
+# 检查脚本是否存在
+if [ ! -f "$S1S2HIC_SCRIPT" ]; then
+    echo "错误: 找不到S1S2HiC完整流程脚本: $S1S2HIC_SCRIPT"
+    exit 1
+fi
+
+echo "流程说明:"
+echo "=========================================="
+echo "1. S1步骤: 筛选包含指定序列模式的reads"
+echo "2. S2步骤: 将筛选的reads按分隔符分割为R1/R2配对"
+echo "3. 数据整理: 将R1/R2文件整理为HiC-Pro输入格式"
+echo "4. HiC-Pro: 执行完整的Hi-C数据分析流程"
+echo "=========================================="
+echo ""
+
+# 示例1: 完整流程基本用法
+echo "示例1: 完整S1S2HiC流程（基本用法）"
+echo "----------------------------------------"
+echo "命令:"
+echo "python3 $S1S2HIC_SCRIPT \\"
+echo "    -p \"ATCG,GCTA\" \\"
+echo "    -d \"scHi-C测试数据\" \\"
+echo "    -i \"*.fq.gz\" \\"
+echo "    -N 50000 \\"
+echo "    --project-name \"test_schic_$(date +%Y%m%d)\" \\"
+echo "    --hic-config 1 \\"
+echo "    --hic-modules \"1,2,3\" \\"
+echo "    --hic-cpu 8"
+echo ""
+echo "此示例将："
+echo "- 从当前目录的.fq.gz文件中筛选包含ATCG和GCTA的reads"
+echo "- 将筛选的reads分割为R1/R2配对"
+echo "- 执行完整的HiC-Pro分析流程"
+echo ""
+
+# 示例2: 自定义所有参数
+echo "示例2: 完整流程（自定义参数）"
+echo "----------------------------------------"
+echo "命令:"
+echo "python3 $S1S2HIC_SCRIPT \\"
+echo "    -p \"GATCGATC,CTAGCTAG\" \\"
+echo "    -d \"自定义scHi-C分析\" \\"
+echo "    -i \"data/*.fastq.gz\" \\"
+echo "    -N all \\"
+echo "    -j 12 \\"
+echo "    --sep1 \"GATCATGTCGGAACTGTTGCTTGTCCGACTGATC\" \\"
+echo "    --sep2 \"AGATCGGAAGA\" \\"
+echo "    --min-length 20 \\"
+echo "    --project-name \"custom_schic_analysis\" \\"
+echo "    --hic-config 2 \\"
+echo "    --hic-modules \"1,2,3\" \\"
+echo "    --hic-cpu 16 \\"
+echo "    --hic-conda-env \"hicpro3\" \\"
+echo "    --s1-output-dir \"S1_Custom\" \\"
+echo "    --s2-output-dir \"S2_Custom\" \\"
+echo "    --hic-input-dir \"HiC_Custom\""
+echo ""
+
+# 示例3: 分步骤运行
+echo "示例3: 分步骤运行流程"
+echo "----------------------------------------"
+echo "# 第一步：只运行S1S2，不运行HiC"
+echo "python3 $S1S2HIC_SCRIPT \\"
+echo "    -p \"ATCG,GCTA\" \\"
+echo "    --skip-hic \\"
+echo "    --project-name \"step1_s1s2\""
+echo ""
+echo "# 第二步：跳过S1S2，只运行HiC"
+echo "python3 $S1S2HIC_SCRIPT \\"
+echo "    -p \"placeholder\" \\"
+echo "    --skip-s1 \\"
+echo "    --skip-s2 \\"
+echo "    --s1-output-dir \"S1_Matched\" \\"
+echo "    --s2-output-dir \"S2_Split\" \\"
+echo "    --project-name \"step2_hic\""
+echo ""
+
+# 示例4: 高性能处理
+echo "示例4: 高性能并行处理"
+echo "----------------------------------------"
+echo "命令:"
+echo "python3 $S1S2HIC_SCRIPT \\"
+echo "    -p \"ATCG,GCTA,TGCA\" \\"
+echo "    -d \"高通量scHi-C分析\" \\"
+echo "    -N all \\"
+echo "    -j 16 \\"
+echo "    --hic-cpu 20 \\"
+echo "    --hic-modules \"1,2,3,4\" \\"
+echo "    --project-name \"high_throughput_schic\""
+echo ""
+
+echo "================================================================"
+echo "参数说明"
+echo "================================================================"
+echo "必需参数:"
+echo "  -p: 搜索的序列模式（逗号分隔）"
+echo ""
+echo "S1相关参数:"
+echo "  -d: 序列描述"
+echo "  -i: 输入文件模式"
+echo "  -N: 处理行数（'all'表示全部）"
+echo "  -j: S1并行任务数"
+echo ""
+echo "S2相关参数:"
+echo "  --sep1: 第一个分隔符序列"
+echo "  --sep2: 第二个分隔符序列"
+echo "  --min-length: 最小序列长度"
+echo ""
+echo "HiC相关参数:"
+echo "  --hic-config: 配置文件类型（1: scCARE.txt, 2: SCCARE_INlaIIl.txt, 3: hicpro_config.txt）"
+echo "  --hic-modules: 运行的模块（1: trim, 2: HiC-Pro, 3: Juicebox, 4: 收集.hic）"
+echo "  --hic-cpu: HiC-Pro使用的CPU数"
+echo "  --hic-conda-env: Conda环境名"
+echo "  --project-name: 项目名称"
+echo ""
+echo "目录参数:"
+echo "  --s1-output-dir: S1输出目录"
+echo "  --s2-output-dir: S2输出目录"
+echo "  --hic-input-dir: HiC输入目录"
+echo ""
+echo "流程控制:"
+echo "  --skip-s1: 跳过S1步骤"
+echo "  --skip-s2: 跳过S2步骤"
+echo "  --skip-hic: 跳过HiC步骤"
+echo ""
+
+echo "================================================================"
+echo "输出文件结构"
+echo "================================================================"
+echo "完整流程将产生以下目录结构:"
+echo ""
+echo "项目目录/"
+echo "├── S1_Matched/              # S1筛选的匹配文件"
+echo "│   └── *.gz"
+echo "├── S2_Split/                # S2分割的R1/R2文件"
+echo "│   ├── 样本1/"
+echo "│   │   ├── 样本1_R1.fq.gz"
+echo "│   │   ├── 样本1_R2.fq.gz"
+echo "│   │   └── 样本1_discarded.fq.gz"
+echo "│   └── 样本2/"
+echo "├── HiC_Input/               # 整理后的HiC输入文件"
+echo "│   ├── 样本1/"
+echo "│   │   ├── 样本1_R1.fq.gz"
+echo "│   │   └── 样本1_R2.fq.gz"
+echo "│   └── 样本2/"
+echo "├── Run0_log/                # HiC-Pro运行日志"
+echo "├── Run2_trim/               # Trim_galore输出"
+echo "├── Run3_hic/                # HiC-Pro主要输出"
+echo "│   ├── hic_results/"
+echo "│   │   ├── data/            # Hi-C数据"
+echo "│   │   ├── matrix/          # Hi-C矩阵"
+echo "│   │   ├── pic/             # 质控图片"
+echo "│   │   └── stats/           # 统计信息"
+echo "├── Run4_HICdata*/           # .hic文件收集目录"
+echo "└── S1S2HiC_Complete_Report_*.txt  # 完整流程报告"
+echo ""
+
+# 实际运行示例（如果有测试数据）
+echo "================================================================"
+echo "实际运行测试"
+echo "================================================================"
+
+# 检查当前目录是否有.gz测试文件
+if ls *.gz 1> /dev/null 2>&1; then
+    echo "发现.gz文件，可以运行测试示例..."
+    echo ""
+    echo "建议的测试命令:"
+    echo "python3 $S1S2HIC_SCRIPT \\"
+    echo "    -p \"ATCG,GCTA\" \\"
+    echo "    -d \"测试运行\" \\"
+    echo "    -N 10000 \\"
+    echo "    --project-name \"test_run_$(date +%Y%m%d_%H%M%S)\" \\"
+    echo "    --hic-config 1 \\"
+    echo "    --hic-cpu 4"
+    echo ""
+    
+    # 询问用户是否运行
+    read -p "是否运行此测试？(y/N): " run_test
+    if [[ $run_test =~ ^[Yy]$ ]]; then
+        echo "开始运行测试..."
+        python3 "$S1S2HIC_SCRIPT" \
+            -p "ATCG,GCTA" \
+            -d "测试运行" \
+            -N 10000 \
+            --project-name "test_run_$(date +%Y%m%d_%H%M%S)" \
+            --hic-config 1 \
+            --hic-cpu 4
+        
+        echo ""
+        echo "测试完成！请检查以下目录："
+        echo "- S1结果: S1_Matched/"
+        echo "- S2结果: S2_Split/"
+        echo "- HiC输入: HiC_Input/"
+        echo "- HiC结果: Run3_hic/ 和 Run4_HICdata*/"
+        echo "- 完整报告: S1S2HiC_Complete_Report_*.txt"
+    else
+        echo "跳过测试运行"
+    fi
+else
+    echo "未发现.gz文件，跳过实际测试"
+    echo ""
+    echo "要运行实际测试，请："
+    echo "1. 将.fq.gz或.fastq.gz文件放在当前目录"
+    echo "2. 确保已安装并配置好："
+    echo "   - HiC-Pro环境"
+    echo "   - trim_galore"
+    echo "   - ParaFly"
+    echo "   - 相关参考基因组文件"
+    echo "3. 重新运行此示例脚本"
+fi
+
+echo ""
+echo "================================================================"
+echo "注意事项"
+echo "================================================================"
+echo "1. 确保有足够的磁盘空间（Hi-C分析需要大量存储）"
+echo "2. 确保HiC-Pro环境已正确配置"
+echo "3. 大型数据集建议在服务器上运行"
+echo "4. 可以使用--skip-*参数分步骤运行流程"
+echo "5. 流程会自动生成详细的报告文件"
+echo "================================================================" 

@@ -1,0 +1,92 @@
+# S1S2HiC流程配置文件
+# 配置文件格式：YAML
+# 注释：以#开头的行为注释
+
+# ================================
+# S1步骤配置 - 序列筛选
+# ================================
+S1_config:
+  # 要筛选的序列模式（逗号分隔）
+  patterns: "ATCGATCG,GCTAGCTA"
+  
+  # 项目描述
+  description: "S1S2HiC完整流程"
+  
+  # 输入文件匹配模式
+  input_pattern: "*gz"
+  
+  # 处理行数（数字或'all'）
+  lines_to_process: 100000
+  
+  # 并行任务数（可选，留空使用默认值）
+  jobs: 8
+  
+  # S1输出目录
+  output_dir: "S1_Matched"
+
+# ================================
+# S2步骤配置 - 序列分割
+# ================================
+S2_config:
+  # 第一个分隔符序列
+  separator1: "GATCATGTCGGAACTGTTGCTTGTCCGACTGATC"
+  
+  # 第二个分隔符序列
+  separator2: "AGATCGGAAGA"
+  
+  # 分割后序列的最小长度
+  min_length: 10
+  
+  # S2输出目录
+  output_dir: "S2_Split"
+
+# ================================
+# HiC步骤配置 - HiC-Pro分析
+# ================================
+HiC_config:
+  # HiC输入目录（从S2整理后的数据）
+  input_dir: "HiC_Input"
+  
+  # HiC-Pro项目名称（留空自动生成时间戳）
+  project_name: ""
+  
+  # HiC-Pro配置文件类型
+  # 1: scCARE.txt
+  # 2: SCCARE_INlaIIl.txt  
+  # 3: hicpro_config.txt
+  config_type: 1
+  
+  # 要运行的HiC-Pro模块
+  modules: "1,2,3"
+  
+  # 并行CPU数量
+  cpu_count: 10
+  
+  # Conda环境名称
+  conda_env: "runhicpro"
+
+# ================================
+# 流程控制配置
+# ================================
+workflow_control:
+  # 跳过S1步骤（使用现有S1输出）
+  skip_s1: false
+  
+  # 跳过S2步骤（使用现有S2输出）
+  skip_s2: false
+  
+  # 跳过HiC步骤（只运行S1S2预处理）
+  skip_hic: false
+
+# ================================
+# 高级配置（可选）
+# ================================
+advanced_config:
+  # 是否生成详细报告
+  generate_report: true
+  
+  # 临时文件清理
+  cleanup_temp_files: false
+  
+  # 日志级别（info, debug, warning, error）
+  log_level: "info" 

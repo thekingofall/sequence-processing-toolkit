@@ -40,7 +40,7 @@ def get_cpu_count():
     if nproc_path:
         try:
             import subprocess
-            result = subprocess.run([nproc_path], capture_output=True, text=True, check=True)
+            result = subprocess.run([nproc_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, check=True)
             return int(result.stdout.strip())
         except Exception:
             return DEFAULT_MAX_JOBS_FALLBACK

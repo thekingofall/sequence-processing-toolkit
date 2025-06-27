@@ -1,0 +1,34 @@
+# Group3: MseI+CviQI+TA+SeqA 配置文件
+# 样本: MME-4, MME-5, MME-6, MME-10, MME-11 (10个文件)
+
+S1_config:
+  patterns: "ATGTCGGAACTGTTGCTTGTCCGACT"  # SeqA连接序列
+  description: "Group3_MseI_CviQI_TA_SeqA_Linker_Separation"
+  input_pattern: "*.fq.gz"
+  lines_to_process: 1000000000
+  jobs: 6
+  output_dir: "Group3_S1_Linker_Separated"
+
+S2_config:
+  separator1: "TAATGTCGGAACTGTTGCTTGTCCGACTTA"  # TA酶切位点+SeqA连接序列
+  separator2: "AGATCGGAAGA"  # 通用adapter序列
+  min_length: 5
+  output_dir: "Group3_S2_Enzyme_Split"
+
+HiC_config:
+  input_dir: "Group3_HiC_Input"
+  project_name: "Group3_MseI_CviQI_TA_SeqA_HiC"
+  config_type: 1
+  modules: "2,3"  # 默认跳过trim模块
+  cpu_count: 10
+  conda_env: "hicpro3"
+  script_type: "new"  # 'new'=新版本脚本(默认), 'old'=旧版本脚本
+
+workflow_control:
+  skip_s1: false
+  skip_s2: false
+  skip_hic: false
+
+advanced_config:
+  generate_report: true
+  input_data_dir: "/data1/maolp/Biosoft/Myscript/sequence-processing-toolkit/data/fastq/Allfq/ByGroups/Group3_MseI_CviQI_TA_SeqA" 

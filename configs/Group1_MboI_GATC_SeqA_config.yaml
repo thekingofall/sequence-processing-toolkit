@@ -1,0 +1,34 @@
+# Group1: MboI+GATC+SeqA 配置文件
+# 样本: MME-1, MME-12, MME-13 (6个文件)
+
+S1_config:
+  patterns: "ATGTCGGAACTGTTGCTTGTCCGACT"  # SeqA连接序列
+  description: "Group1_MboI_GATC_SeqA_Linker_Separation"
+  input_pattern: "*.fq.gz"
+  lines_to_process: 1000000000
+  jobs: 4
+  output_dir: "Group1_S1_Linker_Separated"
+
+S2_config:
+  separator1: "GATCATGTCGGAACTGTTGCTTGTCCGACTGATC"  # MboI酶切位点+SeqA连接序列
+  separator2: "AGATCGGAAGA"  # 通用adapter序列
+  min_length: 5
+  output_dir: "Group1_S2_Enzyme_Split"
+
+HiC_config:
+  input_dir: "Group1_HiC_Input"
+  project_name: "Group1_MboI_GATC_SeqA_HiC"
+  config_type: 1
+  modules: "2,3"  # 默认跳过trim模块
+  cpu_count: 10
+  conda_env: "hicpro3"
+  script_type: "new"  # 'new'=新版本脚本(默认), 'old'=旧版本脚本
+
+workflow_control:
+  skip_s1: false
+  skip_s2: false
+  skip_hic: false
+
+advanced_config:
+  generate_report: true
+  input_data_dir: "/data1/maolp/Biosoft/Myscript/sequence-processing-toolkit/data/fastq/Allfq/ByGroups/Group1_MboI_GATC_SeqA" 
