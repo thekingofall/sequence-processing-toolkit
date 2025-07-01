@@ -1,0 +1,135 @@
+# =============================================================================
+# 空白配置模板 - 完全自定义你的并行处理任务
+# =============================================================================
+
+# 全局配置 - 根据你的需求修改
+global_settings:
+  # 脚本根目录（自动检测，留空或设为 "auto" 即可）
+  script_dir: "auto"  # 自动检测为配置文件所在目录
+  
+  # 你的主处理脚本（相对于script_dir或绝对路径）
+  pipeline_script: "your_script.py"  # 👈 改成你的脚本
+  
+  # 配置文件目录（相对于script_dir）
+  config_dir: "configs"
+  
+  # 日志输出目录（相对于script_dir）
+  log_dir: "parallel_logs"
+  
+  # 解释器命令（python3, bash, R等）
+  python_cmd: "python3"  # 👈 或者改成 "bash", "Rscript" 等
+  
+  # 传给脚本的参数
+  pipeline_args: ""  # 👈 你的脚本参数，如 "--mode fast --output csv"
+  
+  # 启动间隔（秒），避免资源竞争
+  startup_delay: 2
+
+# 处理组定义 - 在这里定义你的任务
+processing_groups:
+  
+  # 👇 删除下面的示例，添加你自己的任务组
+  
+  # 示例任务组1 - 删除这个，用你的任务替换
+  example_task1:
+    description: "示例任务1 - 删除我，用你的任务"
+    config_file: "task1.conf"           # 你的任务配置文件
+    work_dir: "./data/task1"            # 相对路径或绝对路径
+    enabled: false                      # 设为false禁用示例
+    cleanup_patterns:                   # 要清理的文件（可选）
+      - "temp_*"
+      - "output_old*"
+  
+  # 示例任务组2 - 删除这个，用你的任务替换  
+  example_task2:
+    description: "示例任务2 - 删除我，用你的任务"
+    config_file: "task2.conf"
+    work_dir: "../data/task2"           # 相对路径示例
+    enabled: false                      # 设为false禁用示例
+    # 不设置cleanup_patterns也可以
+
+# =============================================================================
+# 📝 使用步骤：
+# 
+# 1. 复制此文件: cp blank_config.yaml my_config.yaml
+# 
+# 2. 修改全局设置：
+#    - pipeline_script: 你的处理脚本路径
+#    - python_cmd: 你的解释器 (python3/bash/Rscript/等)
+#    - pipeline_args: 你的脚本参数
+# 
+# 3. 删除示例任务，添加你的任务：
+#    my_real_task:
+#      description: "我的真实任务"
+#      config_file: "my_task.conf"
+#      work_dir: "./my_data"      # 相对路径
+#      enabled: true
+# 
+# 4. 运行: ./runsh.sh -c my_config.yaml
+# 
+# =============================================================================
+
+# 📖 路径配置说明：
+# 
+# script_dir 设置：
+#   - "auto" 或留空：自动检测为配置文件所在目录
+#   - "."：当前目录
+#   - "/absolute/path"：指定绝对路径
+# 
+# work_dir 设置：
+#   - "./data"：相对于当前目录
+#   - "../data"：相对于上级目录  
+#   - "/absolute/path"：绝对路径
+#   - "~/data"：用户主目录下
+#   - "$HOME/data"：环境变量路径
+# 
+# =============================================================================
+
+# 📖 更多示例：
+
+# Python数据处理示例:
+# data_analysis:
+#   description: "数据分析任务"
+#   config_file: "analysis.yaml"
+#   work_dir: "./data/analysis"         # 相对路径
+#   enabled: true
+#   cleanup_patterns:
+#     - "*.tmp"
+#     - "cache/*"
+
+# Bash脚本示例:
+# file_processing:
+#   description: "文件处理任务"  
+#   config_file: "process.conf"
+#   work_dir: "~/projects/files"        # 用户主目录
+#   enabled: true
+
+# R脚本示例:
+# statistical_analysis:
+#   description: "统计分析"
+#   config_file: "stats.R"
+#   work_dir: "../datasets/stats"       # 相对路径
+#   enabled: true
+
+# 机器学习示例:
+# model_training:
+#   description: "模型训练"
+#   config_file: "train.json"
+#   work_dir: "$PROJECT_ROOT/ml/exp1"   # 环境变量
+#   enabled: true
+#   cleanup_patterns:
+#     - "checkpoints_old/*"
+#     - "logs/*.log"
+
+# 多环境示例:
+# dev_task:
+#   description: "开发环境任务"
+#   config_file: "dev.conf"
+#   work_dir: "./dev_data"
+#   enabled: true
+# 
+# prod_task:
+#   description: "生产环境任务"
+#   config_file: "prod.conf"  
+#   work_dir: "/opt/production/data"
+#   enabled: false 

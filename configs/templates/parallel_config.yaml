@@ -1,0 +1,155 @@
+# =============================================================================
+# S1S2HiC 通用并行处理配置文件
+# 如果你的数据路径不同，请修改下面的 work_dir 路径
+# =============================================================================
+
+# 📝 路径说明：
+# - 这个配置文件包含S1S2HiC的预设组
+# - 所有路径都已优化，支持相对路径、环境变量、用户主目录
+# - 如果你的数据在不同位置，只需修改各组的 work_dir 即可
+# 
+# 路径格式支持：
+#   - "/absolute/path"     : 绝对路径
+#   - "./relative/path"    : 相对路径
+#   - "~/data"             : 用户主目录
+#   - "$HOME/data"         : 环境变量
+#   - "${DATA_ROOT}/path"  : 环境变量组合
+
+# 全局配置
+global_settings:
+  # 脚本根目录（自动检测，通常无需修改）
+  script_dir: "auto"  # 自动检测为配置文件所在目录
+  
+  # 主处理脚本路径（相对于script_dir）
+  pipeline_script: "src/S1S2HiC_Pipeline.py"
+  
+  # 配置文件目录（相对于script_dir）
+  config_dir: "configs"
+  
+  # 日志输出目录（相对于script_dir）
+  log_dir: "parallel_logs"
+  
+  # Python解释器命令
+  python_cmd: "python3"
+  
+  # 处理脚本的额外参数
+  pipeline_args: "--skip-trim"
+  
+  # 启动间隔（秒），避免资源竞争
+  startup_delay: 2
+
+# 处理组定义
+# 格式：每个组有唯一的ID、描述、配置文件和工作目录
+processing_groups:
+  
+  group1:
+    # 组的描述信息
+    description: "MboI+GATC+SeqA (3个样本, 6个文件)"
+    
+    # 配置文件名（相对于config_dir）
+    config_file: "Group1_MboI_GATC_SeqA_config.yaml"
+    
+    # 工作目录（绝对路径）
+    work_dir: "/data3/maolp/All_ZengXi_data5/20250502_fq/fastq/Allfq/ByGroups/Group1_MboI_GATC_SeqA"
+    
+    # 是否启用此组（true/false）
+    enabled: true
+    
+    # 清理的目录/文件列表（可选）
+    cleanup_patterns:
+      - "Group1_S1_Linker_Separated"
+      - "Group1_S2_Enzyme_Split"
+      - "Group1_HiC_Input"
+      - "Run2_trim"
+      - "Run3_hic"
+      - "Run0_log"
+      - "Run4_HICdata*"
+      - "CountFold"
+      - "S1S2HiC_Complete_Report_*.txt"
+
+  group2:
+    description: "MboI+GATC+SeqB (1个样本, 2个文件)"
+    config_file: "Group2_MboI_GATC_SeqB_config.yaml"
+    work_dir: "/data3/maolp/All_ZengXi_data5/20250502_fq/fastq/Allfq/ByGroups/Group2_MboI_GATC_SeqB"
+    enabled: true
+    cleanup_patterns:
+      - "Group2_S1_Linker_Separated"
+      - "Group2_S2_Enzyme_Split"
+      - "Group2_HiC_Input"
+      - "Run2_trim"
+      - "Run3_hic"
+      - "Run0_log"
+      - "Run4_HICdata*"
+      - "CountFold"
+      - "S1S2HiC_Complete_Report_*.txt"
+
+  group3:
+    description: "MseI+CviQI+TA+SeqA (3个样本, 6个文件)"
+    config_file: "Group3_MseI_CviQI_TA_SeqA_config.yaml"
+    work_dir: "/data3/maolp/All_ZengXi_data5/20250502_fq/fastq/Allfq/ByGroups/Group3_MseI_CviQI_TA_SeqA"
+    enabled: true
+    cleanup_patterns:
+      - "Group3_S1_Linker_Separated"
+      - "Group3_S2_Enzyme_Split"
+      - "Group3_HiC_Input"
+      - "Run2_trim"
+      - "Run3_hic"
+      - "Run0_log"
+      - "Run4_HICdata*"
+      - "CountFold"
+      - "S1S2HiC_Complete_Report_*.txt"
+
+  group4:
+    description: "MseI+CviQI+TA+SeqB (1个样本, 2个文件)"
+    config_file: "Group4_MseI_CviQI_TA_SeqB_config.yaml"
+    work_dir: "/data3/maolp/All_ZengXi_data5/20250502_fq/fastq/Allfq/ByGroups/Group4_MseI_CviQI_TA_SeqB"
+    enabled: true
+    cleanup_patterns:
+      - "Group4_S1_Linker_Separated"
+      - "Group4_S2_Enzyme_Split"
+      - "Group4_HiC_Input"
+      - "Run2_trim"
+      - "Run3_hic"
+      - "Run0_log"
+      - "Run4_HICdata*"
+      - "CountFold"
+      - "S1S2HiC_Complete_Report_*.txt"
+
+  group5:
+    description: "MboI+CviQI+GATC+TA+SeqA (1个样本, 2个文件)"
+    config_file: "Group5_MboI_CviQI_GATC_TA_SeqA_config.yaml"
+    work_dir: "/data3/maolp/All_ZengXi_data5/20250502_fq/fastq/Allfq/ByGroups/Group5_MboI_CviQI_GATC_TA_SeqA"
+    enabled: true
+    cleanup_patterns:
+      - "Group5_S1_Linker_Separated"
+      - "Group5_S2_Enzyme_Split"
+      - "Group5_HiC_Input"
+      - "Run2_trim"
+      - "Run3_hic"
+      - "Run0_log"
+      - "Run4_HICdata*"
+      - "CountFold"
+      - "S1S2HiC_Complete_Report_*.txt"
+
+# 示例：添加新的处理组（支持多种路径格式）
+# my_new_group:
+#   description: "我的新实验组描述"
+#   config_file: "my_config.yaml"
+#   work_dir: "${DATA_ROOT}/my_experiment"  # 环境变量路径
+#   enabled: true
+#   cleanup_patterns:
+#     - "output_dir*"
+#     - "temp_files"
+# 
+# # 更多路径示例：
+# relative_path_group:
+#   description: "使用相对路径"
+#   config_file: "relative.yaml"  
+#   work_dir: "./data/experiment1"         # 相对于当前目录
+#   enabled: false
+# 
+# home_path_group:
+#   description: "使用用户主目录"
+#   config_file: "home.yaml"
+#   work_dir: "~/biosoft_data/experiment2" # 用户主目录
+#   enabled: false 
